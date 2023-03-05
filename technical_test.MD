@@ -15,7 +15,7 @@ Se sugiere que la aplicación esté construida bajo Nodejs (Backend) y React (Fr
   - Se debe construir la aplicación bajo la arquitectura de microservicios y/o aplicando
     arquitectura hexagonal.
 - El sistema debe contar con un módulo de autenticación (Login, Registro, Recuperación de contraseña)
-  - Autenticaciónportoken(JWT)
+  - Autenticación por token(JWT)
 - Usted debe proponer el tipo de BD (SQL o NoSQL) a utilizar que permita gestionar la
   información en referencia.
   - Debe justificar el por qué la utilización de una y no la otra.

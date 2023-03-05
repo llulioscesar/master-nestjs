@@ -1,0 +1,12 @@
+{
+  "protoPath": "./src/infrastructure/protobuf",
+  "files": [
+    "./src/infrastructure/protobuf/*.proto"
+  ],
+  "outDir": "./src/infrastructure/protobuf",
+  "plugins": {
+    "typescript": {
+      "grpc": true
+    }
+  }
+}
