@@ -1,20 +1,19 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AccountsModule } from './accounts.module';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Logger } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { CreateProfileCommand } from './application/commands/create-profile.command';
+import { CreateProfileCommand } from './application/commands';
 import helmet from 'helmet';
-import { AllExceptionsFilter } from '../../../libs/utils/src';
+import { AllExceptionsFilter } from '../../../shared';
 
 async function bootstrap() {
   const logger = new Logger(AccountsModule.name);
 
   const app = await NestFactory.create(AccountsModule);
 
-  const { httpAdapter } = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter as any));
+  app.useGlobalFilters(new AllExceptionsFilter());
   app.enableCors();
   app.use(helmet());
 

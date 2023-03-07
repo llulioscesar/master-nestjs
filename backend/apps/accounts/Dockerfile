@@ -26,5 +26,5 @@ EXPOSE 3000
 
 FROM base as dev
 
-CMD ["nest", "start", "accounts", "--tsc", "--watch"]
+CMD ["nest", "start", "accounts", "--watch"]
 

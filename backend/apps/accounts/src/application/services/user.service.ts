@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Auth, User } from '../../domain/models';
-import { ProfileService } from './profile.service';
 import { UserService as Service } from '../../domain/services';
 import { UserRepository } from '../../infrastructure/database';
 import { Email, Password } from '../../domain/value-objects';
@@ -11,8 +10,6 @@ export class UserService implements Service {
   constructor(
     @Inject(UserRepository)
     private readonly repository: UserRepository,
-    @Inject(ProfileService)
-    private readonly profileService: ProfileService,
     private jwtService: JwtService,
   ) {}
 
