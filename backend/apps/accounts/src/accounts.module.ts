@@ -10,17 +10,33 @@ import {
   CreateProfileCommand,
   CreateProfileHandler,
 } from './application/commands/create-profile.command';
+import { LoginHandler, LoginQuery } from './application/queries';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from '../../../libs/utils/src';
 
 @Module({
-  imports: [DatabaseModule, EventEmitterModule.forRoot(), CqrsModule],
+  imports: [
+    DatabaseModule,
+    EventEmitterModule.forRoot(),
+    CqrsModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.register({
+      secret: 'secret',
+      signOptions: { expiresIn: '1d', algorithm: 'HS256' },
+    }),
+  ],
   controllers: [UserController, ProfileController],
   providers: [
     UserService,
     ProfileService,
+    JwtStrategy,
     CreateUserCommand,
     CreateUserHandler,
     CreateProfileCommand,
     CreateProfileHandler,
+    LoginQuery,
+    LoginHandler,
   ],
 })
 export class AccountsModule {}

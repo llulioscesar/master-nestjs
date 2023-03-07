@@ -1,3 +1,5 @@
+import { compare, genSaltSync, hashSync } from 'bcrypt';
+
 export class Password {
   value: string;
 
@@ -8,5 +10,14 @@ export class Password {
     }
 
     this.value = value;
+  }
+
+  async encrypt(): Promise<string> {
+    const salt = await genSaltSync(12);
+    return await hashSync(this.value, salt);
+  }
+
+  async compare(password: string): Promise<boolean> {
+    return await compare(this.value, password);
   }
 }

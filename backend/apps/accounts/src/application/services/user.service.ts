@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { User } from '../../domain/models';
+import { Auth, User } from '../../domain/models';
 import { ProfileService } from './profile.service';
 import { UserService as Service } from '../../domain/services';
 import { UserRepository } from '../../infrastructure/database';
-import { genSaltSync, hashSync } from 'bcrypt';
-import { Password } from '../../domain/value-objects';
+import { Email, Password } from '../../domain/value-objects';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService implements Service {
@@ -13,12 +13,10 @@ export class UserService implements Service {
     private readonly repository: UserRepository,
     @Inject(ProfileService)
     private readonly profileService: ProfileService,
+    private jwtService: JwtService,
   ) {}
 
   async create(user: User): Promise<User> {
-    const salt = await genSaltSync(12);
-    user.password = new Password(await hashSync(user.password.value, salt));
-
     return await this.repository.created(user);
   }
 
@@ -28,5 +26,39 @@ export class UserService implements Service {
       throw new Error('User not found');
     }
     return user;
+  }
+
+  async login(email: Email, password: Password): Promise<Auth> {
+    const user = await this.repository.findByEmail(email);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    if (!password.compare(user.password.value)) {
+      throw new Error('Invalid password');
+    }
+
+    const token = this.jwtService.sign({
+      user: {
+        id: user.id,
+        email: user.email.value,
+        role: user.role.value,
+      },
+    });
+
+    const expireToken = new Date();
+    expireToken.setDate(expireToken.getDate() + 1);
+
+    return new Auth({
+      user: new User({
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        username: user.username,
+      }),
+      token,
+      expireToken: expireToken,
+    });
   }
 }

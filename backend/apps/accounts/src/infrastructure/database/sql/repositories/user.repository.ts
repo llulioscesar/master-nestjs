@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UserRepositoryPort } from '../../../../domain/ports';
 import { User } from '../../../../domain/models';
-import { Email, Role, Username } from '../../../../domain/value-objects';
+import {Email, Password, Role, Username} from '../../../../domain/value-objects';
 import { UserEntity } from '../entities';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class UserRepository implements UserRepositoryPort {
     const userEntity = new UserEntity();
     userEntity.email = user.email.value;
     userEntity.username = user.username.value;
-    userEntity.password = user.password.value;
+    userEntity.password = await user.password.encrypt();
     userEntity.role = user.role.value;
 
     const savedUser = await this.repository.save(userEntity);
@@ -33,6 +33,7 @@ export class UserRepository implements UserRepositoryPort {
     return dbUser
       ? new User({
           id: dbUser.id,
+          password: new Password(dbUser.password),
           email: new Email(dbUser.email),
           username: new Username(dbUser.username),
           role: new Role(dbUser.role),
