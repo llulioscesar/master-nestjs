@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CommentEntity } from './comment.entity';
 
 @Entity('publications')
 export class PublicationEntity {
@@ -43,4 +45,7 @@ export class PublicationEntity {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updatedAt: Date;
+
+  @OneToMany(() => CommentEntity, (comment) => comment.publication)
+  comments: CommentEntity[];
 }

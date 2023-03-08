@@ -1,7 +1,6 @@
 PHONY: docker-up
 docker-up:
 	make generate-env-back
-	docker-compose build --no-cache
 	docker-compose up -d
 
 

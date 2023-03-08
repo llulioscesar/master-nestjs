@@ -1,5 +1,6 @@
 import { PublicationEntity } from './publication.entity';
+import { CommentEntity } from './comment.entity';
 
-export { PublicationEntity } from './publication.entity';
+export const entities = [PublicationEntity, CommentEntity];
 
-export const entities = [PublicationEntity];
+export { PublicationEntity, CommentEntity };
