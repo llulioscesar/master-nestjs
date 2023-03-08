@@ -1,6 +1,9 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { PublicationsController } from './application/controllers';
-import { PublicationsService } from './application/services';
+import {
+  CommentsController,
+  PublicationsController,
+} from './application/controllers';
+import { CommentsService, PublicationsService } from './application/services';
 import { DatabaseModule } from './infrastructure/database';
 import {
   CreatePublicationCommand,
@@ -14,10 +17,20 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { UpdatePublicationCommand } from './application/commands';
 import {
+  GetCommentsHandler,
+  GetCommentsQuery,
   GetPublicationsHandler,
   GetPublicationsQuery,
 } from './application/queries';
 import { JwtStrategy, LoggerMiddleware } from '../../../shared';
+import {
+  CreateCommentCommand,
+  CreateCommentHandler,
+} from './application/commands/create-comment.command';
+import {
+  DeleteCommentCommand,
+  DeleteCommentHandler,
+} from './application/commands/delete-comment.command';
 
 @Module({
   imports: [
@@ -33,9 +46,10 @@ import { JwtStrategy, LoggerMiddleware } from '../../../shared';
     CqrsModule,
     EventEmitterModule.forRoot(),
   ],
-  controllers: [PublicationsController],
+  controllers: [PublicationsController, CommentsController],
   providers: [
     PublicationsService,
+    CommentsService,
     CreatePublicationCommand,
     CreatePublicationHandler,
     UpdatePublicationCommand,
@@ -44,6 +58,12 @@ import { JwtStrategy, LoggerMiddleware } from '../../../shared';
     DeletePublicationHandler,
     GetPublicationsQuery,
     GetPublicationsHandler,
+    GetCommentsQuery,
+    GetCommentsHandler,
+    CreateCommentCommand,
+    CreateCommentHandler,
+    DeleteCommentCommand,
+    DeleteCommentHandler,
     JwtStrategy,
   ],
 })
