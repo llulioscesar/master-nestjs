@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { UserRepositoryPort } from '../../../../domain/ports';
 import { User } from '../../../../domain/models';
 import {
@@ -90,5 +90,22 @@ export class UserRepository implements UserRepositoryPort {
           role: new Role(dbUser.role),
         })
       : null;
+  }
+
+  async getUsersByIds(ids: string[]): Promise<User[]> {
+    const find = await this.repository.find({
+      where: {
+        id: In(ids),
+      },
+    });
+
+    return find.map((entity) => {
+      return new User({
+        id: entity.id,
+        email: new Email(entity.email),
+        username: new Username(entity.username),
+        role: new Role(entity.role),
+      });
+    });
   }
 }

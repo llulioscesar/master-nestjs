@@ -14,7 +14,6 @@ services:
     networks:
       - backend
   accounts:
-    platform: linux/amd64
     build:
       dockerfile: ./backend/apps/accounts/Dockerfile
       context: .
@@ -26,6 +25,7 @@ services:
       - postgres
     volumes:
       - ./backend/:/usr/src/app/
+      - /backend/node_modules/:/usr/src/app/node_modules/
     env_file:
       - ./backend/apps/accounts/.env
     ports:
@@ -33,7 +33,6 @@ services:
     networks:
       - backend
   publications:
-    platform: linux/amd64
     build:
       dockerfile: ./backend/apps/publications/Dockerfile
       context: .
@@ -45,10 +44,28 @@ services:
       - postgres
     volumes:
       - ./backend/:/usr/src/app/
+      - ./backend/node_modules/:/usr/src/app/node_modules/
     env_file:
       - ./backend/apps/publications/.env
     ports:
       - 3001:3000
+    networks:
+      - backend
+  app:
+    build:
+      dockerfile: ./frontend/Dockerfile
+      context: .
+      target: development
+    container_name: app
+    image: app
+    restart: always
+    volumes:
+      - ./frontend/:/usr/src/app/
+      - ./frontend/node_modules:/usr/src/app/node_modules
+    env_file:
+      - ./frontend/.env
+    ports:
+      - 8080:3000
     networks:
       - backend
 networks:

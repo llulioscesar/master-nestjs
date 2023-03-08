@@ -13,7 +13,6 @@ export class PublicationRepository implements PublicationRepositoryPort {
 
   async create(publication: Publication): Promise<Publication> {
     let entity = new PublicationEntity();
-    entity.title = publication.title;
     entity.content = publication.content;
     entity.userId = publication.userId;
 
@@ -40,7 +39,6 @@ export class PublicationRepository implements PublicationRepositoryPort {
     if (instance) {
       return new Publication({
         id: instance.id,
-        title: instance.title,
         content: instance.content,
         userId: instance.userId,
         createdAt: instance.createdAt,
@@ -53,15 +51,14 @@ export class PublicationRepository implements PublicationRepositoryPort {
 
   async list(page: number): Promise<ListPublications> {
     const [publications, total] = await this.repository.findAndCount({
-      take: 10,
-      skip: (page - 1) * 10,
+      take: 25,
+      skip: (page - 1) * 25,
       order: { createdAt: 'DESC' },
     });
 
     const post = publications.map((instance) => {
       return new Publication({
         id: instance.id,
-        title: instance.title,
         content: instance.content,
         userId: instance.userId,
         createdAt: instance.createdAt,
@@ -69,7 +66,7 @@ export class PublicationRepository implements PublicationRepositoryPort {
       });
     });
 
-    return new ListPublications(post, total, page, Math.ceil(total / 10));
+    return new ListPublications(post, total, page, Math.ceil(total / 25));
   }
 
   async update(publication: Publication): Promise<Publication> {
@@ -81,7 +78,6 @@ export class PublicationRepository implements PublicationRepositoryPort {
       throw new Error('Publication not found');
     }
 
-    entity.title = publication.title || entity.title;
     entity.content = publication.content || entity.content;
 
     entity = await this.repository.save(entity);

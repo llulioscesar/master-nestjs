@@ -1,10 +1,10 @@
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { IQuery, IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { UserService } from '../services';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { AuthDto, UserDto } from '../dtos';
 import { Email, Password } from '../../domain/value-objects';
 
-export class LoginQuery {
+export class LoginQuery implements IQuery {
   constructor(
     public readonly email: Email,
     public readonly password: Password,

@@ -20,12 +20,6 @@ export class PublicationEntity {
   userId: string;
 
   @Column({
-    name: 'title',
-    nullable: false,
-  })
-  title: string;
-
-  @Column({
     name: 'content',
     nullable: false,
   })

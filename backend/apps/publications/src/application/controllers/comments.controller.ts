@@ -11,14 +11,20 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { GetCommentsQuery } from '../queries';
+import { CountCommentsPublicationsQuery, GetCommentsQuery } from '../queries';
 import { Comment } from '../../domain/models';
 import { CreateCommentCommand, DeleteCommentCommand } from '../commands';
-import { CommentDto, CreateCommentDto, SuccessDto } from '../dtos';
+import {
+  CommentDto,
+  CountCommentsPublicationsDto,
+  CreateCommentDto,
+  SuccessDto,
+} from '../dtos';
+import { convertKeysToSnakeCase } from '../../../../../shared/util';
 
 @Controller('comments')
 @UseGuards(AuthGuard())
-@ApiBearerAuth('jwt')
+@ApiBearerAuth()
 @ApiTags('Comments')
 export class CommentsController {
   constructor(
@@ -34,7 +40,17 @@ export class CommentsController {
     description: 'Comment created',
   })
   async create(@Body() body: CreateCommentDto): Promise<SuccessDto> {
-    const comment = new Comment(body);
+    const { user_id, parent_id, publication_id, content } = body;
+
+    const comment = new Comment({
+      userId: user_id,
+      publicationId: publication_id,
+      content: content,
+    });
+
+    if (parent_id) {
+      comment.parent = new Comment({ id: parent_id });
+    }
 
     const command = new CreateCommentCommand(comment);
     await this.commandBus.execute<CreateCommentCommand, void>(command);
@@ -58,8 +74,34 @@ export class CommentsController {
   @ApiResponse({ status: HttpStatus.OK, type: [CommentDto] })
   async getCommentsForPublicationId(
     @Param('publicationId') publicationId: string,
-  ): Promise<Comment[]> {
+  ): Promise<CommentDto[]> {
     const query = new GetCommentsQuery(publicationId);
-    return await this.queryBus.execute<GetCommentsQuery, Comment[]>(query);
+    const result = await this.queryBus.execute<GetCommentsQuery, Comment[]>(
+      query,
+    );
+    return convertKeysToSnakeCase(result);
+  }
+
+  @Post('publication/count')
+  @ApiBody({
+    type: [String],
+    description: 'Get count comments for publications',
+  })
+  @ApiResponse({ status: HttpStatus.OK, type: [CountCommentsPublicationsDto] })
+  async getCommentsCountForPublicationIds(
+    @Body() publicationIds: string[],
+  ): Promise<CountCommentsPublicationsDto[]> {
+    const query = new CountCommentsPublicationsQuery(publicationIds);
+    const counts = await this.queryBus.execute<
+      CountCommentsPublicationsQuery,
+      Comment[]
+    >(query);
+
+    return counts.map((count) => {
+      const c = new CountCommentsPublicationsDto();
+      c.publication_id = count.publicationId;
+      c.count = count.countsPublications;
+      return c;
+    });
   }
 }

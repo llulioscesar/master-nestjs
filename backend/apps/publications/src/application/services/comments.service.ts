@@ -21,4 +21,10 @@ export class CommentsService implements Service {
   async getByPublicationId(publicationId: string): Promise<Comment[]> {
     return await this.repository.getForPostId(publicationId);
   }
+
+  async countCommentsForPublicationIds(
+    publicationIds: string[],
+  ): Promise<Comment[]> {
+    return await this.repository.countCommentsForPublicationIds(publicationIds);
+  }
 }

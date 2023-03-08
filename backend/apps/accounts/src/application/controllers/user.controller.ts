@@ -1,13 +1,28 @@
-import { Controller, Post, Body, HttpStatus, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpStatus,
+  HttpCode,
+  UseGuards,
+} from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../commands';
-import { AuthDto, CreateUserDto, LoginDto, UserDto } from '../dtos';
+import {
+  AuthDto,
+  CreateUserDto,
+  LoginDto,
+  UserDto,
+  UsersnamesDto,
+} from '../dtos';
 import { Profile, User } from '../../domain/models';
 import { Email, Password, Role, Username } from '../../domain/value-objects';
-import { ApiBody, ApiResponse } from '@nestjs/swagger';
-import {LoginQuery} from "../queries";
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { GetUsersnamesQuery, LoginQuery } from '../queries';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
+@ApiTags('Accounts')
 export class UserController {
   constructor(
     private readonly commandBus: CommandBus,
@@ -47,5 +62,25 @@ export class UserController {
     const { email, password } = loginUserDto;
     const command = new LoginQuery(new Email(email), new Password(password));
     return this.queryBus.execute<LoginQuery, AuthDto>(command);
+  }
+
+  @Post('/byids')
+  @UseGuards(AuthGuard())
+  @ApiBearerAuth()
+  @HttpCode(HttpStatus.OK)
+  @ApiBody({ type: [String], description: 'Get Usersnames By Ids' })
+  @ApiResponse({ status: HttpStatus.OK, type: [UsersnamesDto] })
+  async getUsersnamesByIds(@Body() ids: string[]): Promise<UsersnamesDto[]> {
+    const query = new GetUsersnamesQuery(ids);
+    const users = await this.queryBus.execute<GetUsersnamesQuery, User[]>(
+      query,
+    );
+
+    return users.map((user) => {
+      const dto = new UsersnamesDto();
+      dto.id = user.id;
+      dto.username = user.username.value;
+      return dto;
+    });
   }
 }

@@ -9,10 +9,5 @@ export class UpdatePublicationDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  title: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
   content: string;
 }

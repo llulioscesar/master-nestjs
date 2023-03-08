@@ -15,6 +15,7 @@ export const databaseProviders = [
         database: process.env.DB_DATABASE,
         entities: [...entities],
         migrations: [...migrations],
+        logging: true,
         migrationsRun: true,
         synchronize: false,
       });
