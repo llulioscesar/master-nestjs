@@ -1,10 +1,10 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommand, ICommandHandler } from '@nestjs/cqrs';
 import { Profile } from '../../domain/models';
 import { ProfileService } from '../services';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ProfileDto } from '../dtos';
 
-export class CreateProfileCommand {
+export class CreateProfileCommand implements ICommand {
   constructor(public readonly profile: Profile) {}
 }
 

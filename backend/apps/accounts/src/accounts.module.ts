@@ -1,19 +1,20 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { UserController } from './application/controllers';
 import { ProfileService, UserService } from './application/services';
 import { DatabaseModule } from './infrastructure/database';
-import { CreateUserCommand, CreateUserHandler } from './application/commands';
-import { EventEmitterModule } from '@nestjs/event-emitter';
-import { CqrsModule } from '@nestjs/cqrs';
-import { ProfileController } from './application/controllers/profile.controller';
 import {
   CreateProfileCommand,
   CreateProfileHandler,
-} from './application/commands/create-profile.command';
+  CreateUserCommand,
+  CreateUserHandler,
+} from './application/commands';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { CqrsModule } from '@nestjs/cqrs';
+import { ProfileController } from './application/controllers/profile.controller';
 import { LoginHandler, LoginQuery } from './application/queries';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from '../../../libs/utils/src';
+import { JwtStrategy, LoggerMiddleware } from '../../../shared';
 
 @Module({
   imports: [
@@ -22,8 +23,11 @@ import { JwtStrategy } from '../../../libs/utils/src';
     CqrsModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-      secret: 'secret',
-      signOptions: { expiresIn: '1d', algorithm: 'HS256' },
+      secret: process.env.JWT_SECRET,
+      signOptions: {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+        algorithm: `${process.env.JWT_ALGORITHM}` as any,
+      },
     }),
   ],
   controllers: [UserController, ProfileController],
@@ -39,4 +43,8 @@ import { JwtStrategy } from '../../../libs/utils/src';
     LoginHandler,
   ],
 })
-export class AccountsModule {}
+export class AccountsModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

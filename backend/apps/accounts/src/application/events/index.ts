@@ -1,1 +1,1 @@
-export { UserCreatedEvent } from './user-created.event';
+export { UserCreatedEvent, UserCreatedListener } from './user-created.event';

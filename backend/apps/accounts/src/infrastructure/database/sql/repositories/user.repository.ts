@@ -2,7 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UserRepositoryPort } from '../../../../domain/ports';
 import { User } from '../../../../domain/models';
-import {Email, Password, Role, Username} from '../../../../domain/value-objects';
+import {
+  Email,
+  Password,
+  Role,
+  Username,
+} from '../../../../domain/value-objects';
 import { UserEntity } from '../entities';
 
 @Injectable()
