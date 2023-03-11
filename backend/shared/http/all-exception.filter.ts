@@ -18,7 +18,11 @@ export class AllExceptionsFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost): void {
     const hostType = host.getType();
 
-    this.logger.error(`Host type: ${hostType}`, exception);
+    this.logger.error(
+      `Host type: ${hostType}`,
+      exception,
+      (exception as any).stack,
+    );
 
     if (hostType === 'http') {
       const ctx = host.switchToHttp();

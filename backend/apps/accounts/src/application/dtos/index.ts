@@ -3,3 +3,4 @@ export { UserDto } from './user.dto';
 export { ProfileDto } from './profile.dto';
 export { LoginDto } from './login.dto';
 export { AuthDto } from './auth.dto';
+export { UsersnamesDto } from './usersnames.dto';

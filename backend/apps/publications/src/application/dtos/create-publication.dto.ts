@@ -5,11 +5,6 @@ export class CreatePublicationDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  title: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
   content: string;
 
   @ApiProperty()

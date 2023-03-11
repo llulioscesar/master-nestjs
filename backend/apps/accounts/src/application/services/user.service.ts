@@ -58,4 +58,8 @@ export class UserService implements Service {
       expireToken: expireToken,
     });
   }
+
+  async getUsersByIds(ids: string[]): Promise<User[]> {
+    return this.repository.getUsersByIds(ids);
+  }
 }

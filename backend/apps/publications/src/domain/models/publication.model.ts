@@ -1,6 +1,5 @@
 export class Publication {
   id: string;
-  title: string;
   content: string;
   userId: string;
   createdAt: Date;
@@ -8,7 +7,6 @@ export class Publication {
 
   constructor(props: PublicationProps) {
     this.id = props.id;
-    this.title = props.title;
     this.content = props.content;
     this.userId = props.userId;
     this.createdAt = props.createdAt;
@@ -18,7 +16,6 @@ export class Publication {
 
 interface PublicationProps {
   id?: string;
-  title?: string;
   content?: string;
   userId?: string;
   createdAt?: Date;

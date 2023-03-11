@@ -1,13 +1,11 @@
-FROM node:alpine as base
+FROM node:lts-alpine as base
 
 RUN apk --updated add --no-cache make \
-    protobuf-dev \
     bash \
     ca-certificates \
     openssl \
     gnutls-utils \
     build-base \
-    gcc \
     wget \
     git
 
@@ -20,6 +18,9 @@ COPY ./backend/. .
 RUN yarn global add @nestjs/cli
 
 RUN yarn install
+
+RUN chmod -R a+x /usr/src/app/node_modules/ \
+    && chmod -R 777 /usr/src/app/node_modules/
 
 EXPOSE 3000
 
