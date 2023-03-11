@@ -2,8 +2,15 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import {
   CommentsController,
   PublicationsController,
+  PublicationsControllerGrpc,
 } from './application/controllers';
-import { CommentsService, PublicationsService } from './application/services';
+import {
+  CommentsService,
+  CommentsServiceGrpc,
+  NotificationsService,
+  PublicationServiceGrpc,
+  PublicationsService,
+} from './application/services';
 import { DatabaseModule } from './infrastructure/database';
 import {
   CreatePublicationCommand,
@@ -22,6 +29,8 @@ import {
   CountCommentsPublicationsQuery,
   GetCommentsHandler,
   GetCommentsQuery,
+  GetPublicationQuery,
+  GetPublicationQueryHandler,
   GetPublicationsHandler,
   GetPublicationsQuery,
 } from './application/queries';
@@ -32,13 +41,21 @@ import {
   DeleteCommentCommand,
   DeleteCommentHandler,
 } from './application/commands';
-import {
-  GetPublicationQuery,
-  GetPublicationQueryHandler,
-} from './application/queries/get-publication.query';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
+    ClientsModule.register([
+      {
+        name: 'NOTIFICATIONS_SERVICE',
+        transport: Transport.GRPC,
+        options: {
+          url: `${process.env.GRPC_NOTIFICATIONS}`,
+          package: 'notifications',
+          protoPath: ['/usr/src/app/proto/notifications/notifications.proto'],
+        },
+      },
+    ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: {
@@ -51,7 +68,11 @@ import {
     CqrsModule,
     EventEmitterModule.forRoot(),
   ],
-  controllers: [PublicationsController, CommentsController],
+  controllers: [
+    PublicationsController,
+    CommentsController,
+    PublicationsControllerGrpc,
+  ],
   providers: [
     PublicationsService,
     CommentsService,
@@ -73,7 +94,10 @@ import {
     CountCommentsPublicationsHandler,
     GetPublicationQuery,
     GetPublicationQueryHandler,
+    PublicationServiceGrpc,
+    CommentsServiceGrpc,
     JwtStrategy,
+    NotificationsService,
   ],
 })
 export class PublicationsModule implements NestModule {

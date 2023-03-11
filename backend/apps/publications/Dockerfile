@@ -9,6 +9,11 @@ RUN apk --updated add --no-cache make \
     wget \
     git
 
+RUN apk add grpc-plugins
+
+ENV PROTOBUF_PROTOC=/usr/bin/protoc
+ENV GRPC_PROTOC_PLUGIN=/usr/bin/grpc_node_plugin
+
 WORKDIR /usr/src/app
 
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
@@ -23,6 +28,7 @@ RUN chmod -R a+x /usr/src/app/node_modules/ \
     && chmod -R 777 /usr/src/app/node_modules/
 
 EXPOSE 3000
+EXPOSE 5000
 
 
 FROM base as dev

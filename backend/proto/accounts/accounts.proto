@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package accounts;
+
+
+service AccountsService {
+  rpc GetUser (GetUserRequest) returns (GetUserResponse) {}
+}
+
+message GetUserRequest {
+  string id = 1;
+}
+
+message GetUserResponse {
+  string id = 1;
+  string username = 2;
+  string email = 3;
+}

@@ -1,6 +1,6 @@
 import { ListPublications, Publication } from '../models';
 
-export abstract class PublicationService {
+export abstract class PublicationsService {
   abstract get(page: number): Promise<ListPublications>;
   abstract getById(id: string): Promise<Publication>;
   abstract create(publication: Publication): Promise<Publication>;

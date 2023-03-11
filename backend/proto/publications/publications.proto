@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package publications;
+
+service PublicationsService {
+  rpc getById (GetByIdRequest) returns (GetByIdResponse) {}
+}
+
+message GetByIdRequest {
+  string id = 1;
+}
+
+message GetByIdResponse {
+  string id = 1;
+  string content = 3;
+  string user_id = 4;
+  string created_at = 5;
+  string updated_at = 6;
+}
