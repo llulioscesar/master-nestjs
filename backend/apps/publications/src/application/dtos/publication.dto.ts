@@ -5,11 +5,14 @@ export class PublicationDto {
   id: string;
 
   @ApiProperty()
-  title: string;
-
-  @ApiProperty()
   content: string;
 
   @ApiProperty()
   user_id: string;
+
+  @ApiProperty()
+  created_at: string;
+
+  @ApiProperty()
+  updated_at: string;
 }

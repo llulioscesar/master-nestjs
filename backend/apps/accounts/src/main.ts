@@ -21,7 +21,8 @@ async function bootstrap() {
     .setTitle('Microservice Accounts')
     .setDescription('The accounts microservice description')
     .setVersion('1.0')
-    .addTag('accounts')
+    .addBearerAuth()
+    .addTag('Accounts')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);

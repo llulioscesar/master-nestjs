@@ -42,9 +42,21 @@ export class CommentEntity {
   })
   updatedAt: Date;
 
+  @Column({
+    name: 'publication_id',
+    nullable: false,
+  })
+  publicationId: string;
+
   @ManyToOne(() => PublicationEntity, (publication) => publication.comments)
   @JoinColumn({ name: 'publication_id' })
   publication: PublicationEntity;
+
+  @Column({
+    nullable: false,
+    name: 'parent_id',
+  })
+  parentId: string;
 
   @ManyToOne(() => CommentEntity, (comment) => comment.children)
   @JoinColumn({ name: 'parent_id' })
@@ -58,7 +70,7 @@ export class CommentEntity {
       id: this?.id,
       content: this?.content,
       userId: this?.userId,
-      publicationId: this.publication?.id,
+      publicationId: this?.publicationId,
       createdAt: this?.createdAt,
       updatedAt: this?.updatedAt,
     });

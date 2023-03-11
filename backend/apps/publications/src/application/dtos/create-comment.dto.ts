@@ -18,7 +18,5 @@ export class CreateCommentDto {
   content: string;
 
   @ApiProperty()
-  @IsUUID()
-  @IsEmpty()
   parent_id?: string;
 }

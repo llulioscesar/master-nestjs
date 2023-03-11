@@ -11,7 +11,12 @@ import {
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { CqrsModule } from '@nestjs/cqrs';
 import { ProfileController } from './application/controllers/profile.controller';
-import { LoginHandler, LoginQuery } from './application/queries';
+import {
+  GetUsersnamesHandler,
+  GetUsersnamesQuery,
+  LoginHandler,
+  LoginQuery,
+} from './application/queries';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy, LoggerMiddleware } from '../../../shared';
@@ -41,6 +46,8 @@ import { JwtStrategy, LoggerMiddleware } from '../../../shared';
     CreateProfileHandler,
     LoginQuery,
     LoginHandler,
+    GetUsersnamesQuery,
+    GetUsersnamesHandler,
   ],
 })
 export class AccountsModule implements NestModule {

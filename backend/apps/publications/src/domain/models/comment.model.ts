@@ -7,16 +7,19 @@ export class Comment {
   updatedAt: Date;
   parent: Comment;
   children: Comment[];
+  countsPublications: number;
 
-  constructor(props: CommentProps) {
-    this.id = props.id;
-    this.content = props.content;
-    this.userId = props.userId;
-    this.publicationId = props.publicationId;
-    this.createdAt = props.createdAt;
-    this.updatedAt = props.updatedAt;
-    this.parent = props.parent;
-    this.children = props.children;
+  constructor(props?: CommentProps) {
+    if (props) {
+      this.id = props.id;
+      this.content = props.content;
+      this.userId = props.userId;
+      this.publicationId = props.publicationId;
+      this.createdAt = props.createdAt;
+      this.updatedAt = props.updatedAt;
+      this.parent = props.parent;
+      this.children = props.children;
+    }
   }
 }
 

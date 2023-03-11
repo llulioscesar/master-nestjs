@@ -7,4 +7,5 @@ export abstract class UserRepositoryPort {
   abstract findByEmail(email: Email): Promise<User | null>;
   abstract created(user: User): Promise<User>;
   abstract updated(user: User): Promise<User>;
+  abstract getUsersByIds(ids: string[]): Promise<User[]>;
 }
