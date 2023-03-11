@@ -1,32 +1,34 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { GrpcService } from '@nestjs/microservices';
 import { PublicationsService as Service } from '../../domain/services';
-import { PublicationRepository } from '../../infrastructure/database';
 import { ListPublications, Publication } from '../../domain/models';
+import { PublicationsService } from './publication.service';
 
 @Injectable()
-export class PublicationsService implements Service {
+@GrpcService()
+export class PublicationServiceGrpc implements Service {
   constructor(
-    @Inject(PublicationRepository)
-    private readonly repository: PublicationRepository,
+    @Inject(PublicationsService)
+    private readonly service: PublicationsService,
   ) {}
 
   async create(publication: Publication): Promise<Publication> {
-    return await this.repository.create(publication);
+    return this.service.update(publication);
   }
 
   async delete(id: string): Promise<void> {
-    return await this.repository.delete(id);
+    return this.service.delete(id);
   }
 
   async get(page: number): Promise<ListPublications> {
-    return await this.repository.list(page);
+    return this.service.get(page);
   }
 
   async getById(id: string): Promise<Publication> {
-    return await this.repository.findById(id);
+    return this.service.getById(id);
   }
 
   async update(publication: Publication): Promise<Publication> {
-    return await this.repository.update(publication);
+    return this.service.update(publication);
   }
 }

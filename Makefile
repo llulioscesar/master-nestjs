@@ -2,6 +2,7 @@ PHONY: docker-up
 docker-up:
 	make generate-env-back
 	make node-install-backend
+	make generate-proto
 	make node-install-frontend
 	docker-compose up -d
 
@@ -21,3 +22,10 @@ node-install-backend:
 PHONY: node-install-frontend
 node-install-frontend:
 	cd frontend && npm install
+
+PHONY: generate-proto
+generate-proto:
+	cd backend && npm run proto:accounts
+	cd backend && npm run proto:publications
+	cd backend && npm run proto:comments
+	cd backend && npm run proto:notifications

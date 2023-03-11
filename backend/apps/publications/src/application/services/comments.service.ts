@@ -11,7 +11,8 @@ export class CommentsService implements Service {
   ) {}
 
   async create(comment: Comment): Promise<Comment> {
-    return await this.repository.create(comment);
+    const saved = await this.repository.create(comment);
+    return saved;
   }
 
   async delete(id: string): Promise<void> {

@@ -1,6 +1,14 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { UserController } from './application/controllers';
-import { ProfileService, UserService } from './application/services';
+import {
+  ProfileController,
+  UserController,
+  UserControllerGrpc,
+} from './application/controllers';
+import {
+  ProfileService,
+  UserService,
+  UsersServiceGrpc,
+} from './application/services';
 import { DatabaseModule } from './infrastructure/database';
 import {
   CreateProfileCommand,
@@ -10,7 +18,6 @@ import {
 } from './application/commands';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { CqrsModule } from '@nestjs/cqrs';
-import { ProfileController } from './application/controllers/profile.controller';
 import {
   GetUsersnamesHandler,
   GetUsersnamesQuery,
@@ -35,7 +42,7 @@ import { JwtStrategy, LoggerMiddleware } from '../../../shared';
       },
     }),
   ],
-  controllers: [UserController, ProfileController],
+  controllers: [UserController, ProfileController, UserControllerGrpc],
   providers: [
     UserService,
     ProfileService,
@@ -48,6 +55,7 @@ import { JwtStrategy, LoggerMiddleware } from '../../../shared';
     LoginHandler,
     GetUsersnamesQuery,
     GetUsersnamesHandler,
+    UsersServiceGrpc,
   ],
 })
 export class AccountsModule implements NestModule {
