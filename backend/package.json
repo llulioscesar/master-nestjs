@@ -17,9 +17,15 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config apps/accounts/test/jest-e2e.json"
+    "test:e2e": "jest --config apps/accounts/test/jest-e2e.json",
+    "proto:accounts": "protoc --plugin=node_modules/.bin/protoc-gen-ts_proto -I=./proto/accounts --ts_proto_out=proto/accounts ./proto/accounts/accounts.proto --ts_proto_opt=nestJs=true --ts_proto_opt=fileSuffix=.pb",
+    "proto:publications": "protoc --plugin=node_modules/.bin/protoc-gen-ts_proto -I=./proto/publications --ts_proto_out=proto/publications ./proto/publications/publications.proto --ts_proto_opt=nestJs=true --ts_proto_opt=fileSuffix=.pb",
+    "proto:comments": "protoc --plugin=node_modules/.bin/protoc-gen-ts_proto -I=./proto/comments --ts_proto_out=proto/comments ./proto/comments/comments.proto --ts_proto_opt=nestJs=true --ts_proto_opt=fileSuffix=.pb",
+    "proto:notifications": "protoc --plugin=node_modules/.bin/protoc-gen-ts_proto -I=./proto/notifications --ts_proto_out=proto/notifications ./proto/notifications/notifications.proto --ts_proto_opt=nestJs=true --ts_proto_opt=fileSuffix=.pb"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.8.12",
+    "@grpc/proto-loader": "^0.7.5",
     "@nestjs/common": "^9.3.9",
     "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.3.9",
@@ -43,6 +49,7 @@
     "pg": "^8.9.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
+    "ts-proto": "^1.141.0",
     "typeorm": "^0.3.12",
     "uuid": "^9.0.0"
   },
@@ -53,6 +60,7 @@
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.13",
     "@types/jest": "29.2.4",
+    "@types/morgan": "^1.9.4",
     "@types/node": "18.11.18",
     "@types/passport-jwt": "^3.0.8",
     "@types/supertest": "^2.0.11",
@@ -66,7 +74,7 @@
     "source-map-support": "^0.5.20",
     "supertest": "^6.1.3",
     "ts-jest": "29.0.3",
-    "ts-loader": "^9.2.3",
+    "ts-loader": "^9.4.2",
     "ts-node": "^10.0.0",
     "ts-protoc-gen": "^0.15.0",
     "tsconfig-paths": "4.1.1",

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package notifications;
+
+service NotificationsService {
+  rpc send (SendRequest) returns (google.protobuf.Empty);
+}
+
+message SendRequest {
+  string user_id = 1;
+  string content = 2;
+  string publication_id = 3;
+}

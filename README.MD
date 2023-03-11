@@ -1,7 +1,9 @@
-# Prueba Técnica Ingeniero Desarrollo Master
+# Prueba Técnica Ingeniero Desarrollo Master [![wakatime](https://wakatime.com/badge/user/bfe2338b-3c85-4190-b6de-3a23312ee3d5/project/062958f2-47e4-49e7-bc0b-2d38046219e3.svg)](https://wakatime.com/@bfe2338b-3c85-4190-b6de-3a23312ee3d5/projects/xnpctbuizn?start=2023-03-05&end=2023-03-11)
 
 ## Requisitos
 
+
+- [x] Protoc [Instalar](https://developers.google.com/protocol-buffers/docs/downloads)
 - [x] Docker
 - [x] Docker Compose
 - [x] Nodejs
@@ -40,7 +42,9 @@ El codigo fuente se encuentra en la carpeta `backend/apps/accounts`
 - http://localhost:3000/swagger
 
 #### Microservicio de publicaciones
-Este esta vinculado al puero 3001, y se encarga de manejar las publicaciones, como crear una publicación, listar, administrar comentarios
+
+Este esta vinculado al puero 3001, y se encarga de manejar las publicaciones, como crear una publicación, listar,
+administrar comentarios
 
 El codigo fuente se encuentra en la carpeta `backend/apps/publications`
 

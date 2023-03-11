@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package publications;
+
+service CommentsService {
+  rpc getByPublicationId (getByPublicationIdRequest) returns (getByPublicationIdResponse) {}
+}
+
+message getByPublicationIdRequest {
+  string id = 1;
+}
+
+message Comment {
+  string id = 1;
+  string content = 2;
+  string publication_id = 3;
+  string user_id = 4;
+  string created_at = 5;
+  string updated_at = 6;
+  repeated Comment children = 7;
+}
+
+message getByPublicationIdResponse {
+  repeated Comment comments = 1;
+}

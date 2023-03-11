@@ -1,4 +1,4 @@
-import { Comment, Publication } from '../models';
+import { Comment } from '../models';
 
 export abstract class CommentsService {
   abstract getByPublicationId(publicationId: string): Promise<Comment[]>;

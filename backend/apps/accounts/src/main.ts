@@ -7,6 +7,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { CreateProfileCommand } from './application/commands';
 import helmet from 'helmet';
 import { AllExceptionsFilter } from '../../../shared';
+import { Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const logger = new Logger(AccountsModule.name);
@@ -34,6 +35,19 @@ async function bootstrap() {
     const command = new CreateProfileCommand(user.profile);
     commandBus.execute(command);
   });
+
+  const microservice = app.connectMicroservice({
+    transport: Transport.GRPC,
+    options: {
+      package: 'accounts',
+      protoPath: [`/usr/src/app/proto/accounts/accounts.proto`],
+      url: '0.0.0.0:5000',
+    },
+  });
+
+  microservice.useGlobalFilters(new AllExceptionsFilter());
+
+  await app.startAllMicroservices();
 
   await app.listen(3000);
 }

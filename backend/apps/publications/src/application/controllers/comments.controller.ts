@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   HttpStatus,
+  Inject,
   Param,
   Post,
   UseGuards,
@@ -21,6 +22,7 @@ import {
   SuccessDto,
 } from '../dtos';
 import { convertKeysToSnakeCase } from '../../../../../shared/util';
+import { NotificationsService } from '../services';
 
 @Controller('comments')
 @UseGuards(AuthGuard())
@@ -30,6 +32,8 @@ export class CommentsController {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
+    @Inject(NotificationsService)
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   @Post()
@@ -54,6 +58,11 @@ export class CommentsController {
 
     const command = new CreateCommentCommand(comment);
     await this.commandBus.execute<CreateCommentCommand, void>(command);
+    this.notificationsService.sendNotification(
+      user_id,
+      content,
+      publication_id,
+    );
     return new SuccessDto(true);
   }
 

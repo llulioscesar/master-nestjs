@@ -33,5 +33,5 @@ EXPOSE 5000
 
 FROM base as dev
 
-CMD ["nest", "start", "accounts", "--watch"]
+CMD ["nest", "start", "notifications", "--watch"]
 
